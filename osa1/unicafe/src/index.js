@@ -11,6 +11,14 @@ class App extends React.Component {
         }
     }
 
+    listener = (target) => {
+        return () => {
+            this.setState({
+                [target]: this.state[target] + 1
+            })
+        }
+    }
+
     klikHyva = () => {
         this.setState({
             hyva: this.state.hyva + 1,
@@ -45,13 +53,13 @@ class App extends React.Component {
             <div>
                 <h1>Anna Palautetta</h1>
                 <Button
-                    handleClick={this.klikHyva}
+                    handleClick={this.listener("hyva")}
                     text="Hyvä!" />
                 <Button
-                    handleClick={this.klikNeutraali}
+                    handleClick={this.listener("neutraali")}
                     text="Neutraali" />
                 <Button
-                    handleClick={this.klikHuono}
+                    handleClick={this.listener("huono")}
                     text="huono..." />
                 <h1>Statistiikka</h1>
                 {hasValues()}
