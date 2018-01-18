@@ -27,20 +27,24 @@ class App extends React.Component {
         })
     }
 
-
     render() {
+        const average = () => (this.state.hyva - this.state.huono) / (this.state.hyva + this.state.huono + this.state.neutraali)
+        const percentPositive = () => (this.state.hyva / (this.state.hyva + this.state.huono + this.state.neutraali)) * 100
         return (
+
             <div>
                 <h1>Anna Palautetta</h1>
                 <button onClick={this.klikHyva}>Hyvä!</button>
                 <button onClick={this.klikNeutraali}>Neutraali</button>
                 <button onClick={this.klikHuono}>huono...</button>
-                
+
                 <h1>Statistiikka</h1>
                 <p>Hyvä: {this.state.hyva}</p>
                 <p>Neutraali: {this.state.neutraali}</p>
                 <p>Huono: {this.state.huono}</p>
-            </div>
+                <p>Keskiarvo: {average()}</p>
+                <p>Positiivisia: {percentPositive()}%</p>
+            </div >
         )
     }
 }
