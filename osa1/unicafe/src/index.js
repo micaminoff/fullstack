@@ -19,22 +19,6 @@ class App extends React.Component {
         }
     }
 
-    klikHyva = () => {
-        this.setState({
-            hyva: this.state.hyva + 1,
-        })
-    }
-    klikNeutraali = () => {
-        this.setState({
-            neutraali: this.state.neutraali + 1,
-        })
-    }
-    klikHuono = () => {
-        this.setState({
-            huono: this.state.huono + 1,
-        })
-    }
-
     render() {
         const average = () => (this.state.hyva - this.state.huono) / (this.state.hyva + this.state.huono + this.state.neutraali)
         const percentPositive = () => (this.state.hyva / (this.state.hyva + this.state.huono + this.state.neutraali)) * 100
