@@ -60,18 +60,23 @@ const Button = ({ handleClick, text }) => (
 
 const Statistics = ({ state, average, positive }) => (
     <div>
-        <Statistic text="Hyvä" number={state.hyva} />
-        <Statistic text="Neutraali" number={state.neutraali} />
-        <Statistic text="Huono" number={state.huono} />
-        <Statistic text="Keskiarvo" number={average} />
-        <Statistic text="Positiivisia" number={positive + "%"} />
+        <table>
+            <tbody>
+                <Statistic text="Hyvä" number={state.hyva} />
+                <Statistic text="Neutraali" number={state.neutraali} />
+                <Statistic text="Huono" number={state.huono} />
+                <Statistic text="Keskiarvo" number={average} />
+                <Statistic text="Positiivisia" number={positive + "%"} />
+            </tbody>
+        </table>
     </div>
 )
 
 const Statistic = ({ text, number }) => (
-    <div>
-        <p>{text}: {number}</p>
-    </div>
+    <tr>
+        <td>{text}</td>
+        <td>{number}</td>
+    </tr>
 )
 
 ReactDOM.render(
