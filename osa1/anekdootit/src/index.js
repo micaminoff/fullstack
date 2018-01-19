@@ -5,13 +5,22 @@ class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            selected: 0
+            selected: 0,
+            votes: new Array(6).fill(0)
         }
     }
 
     listener = (target) => {
         let rando = Math.floor(Math.random() * anecdotes.length)
-        console.log(rando)
+        if (target === "votes") {
+            const votes = this.state.votes.slice()
+            votes[this.state.selected] = this.state.votes[this.state.selected] + 1
+            return () => {
+                this.setState({
+                    [target]: votes
+                })
+            }
+        }
         return () => {
             this.setState({
                 [target]: rando
@@ -22,10 +31,13 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Text selected={this.state.selected} />
+                <Text selected={this.state.selected} votes={this.state.votes[this.state.selected]} />
                 <Button
                     handleClick={this.listener("selected")}
                     text="Random anecdote" />
+                <Button
+                    handleClick={this.listener("votes")}
+                    text="Vote!" />
             </div>
         )
     }
@@ -40,10 +52,15 @@ const anecdotes = [
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
 
-const Text = ({ selected }) => (
-    <p>
-        {anecdotes[selected]}
-    </p>
+const Text = ({ selected, votes }) => (
+    <div>
+        <p>
+            {anecdotes[selected]}
+        </p>
+        <p>
+            Has {votes} votes.
+        </p>
+    </div>
 )
 
 const Button = ({ handleClick, text }) => (
