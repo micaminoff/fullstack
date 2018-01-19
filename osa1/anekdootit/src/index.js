@@ -29,6 +29,9 @@ class App extends React.Component {
     }
 
     render() {
+        const getMaxVotes = () => (
+            Math.max(...this.state.votes)
+        )
         return (
             <div>
                 <Text selected={this.state.selected} votes={this.state.votes[this.state.selected]} />
@@ -38,6 +41,8 @@ class App extends React.Component {
                 <Button
                     handleClick={this.listener("votes")}
                     text="Vote!" />
+                <h1>Highest rated anecdote</h1>
+                <Text selected={this.state.votes.indexOf(getMaxVotes())} votes={getMaxVotes()} />
             </div>
         )
     }
