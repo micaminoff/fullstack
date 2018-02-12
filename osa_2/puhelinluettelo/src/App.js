@@ -41,7 +41,7 @@ class App extends React.Component {
         personService.remove(id)
           .then(response => {
             this.setState({
-              persons: this.state.persons.filter(person => person.id !== id)
+              persons: this.state.persons.filter(person => person._id !== id)
             })
           })
           this.setMessage("Person successfully removed!")
@@ -55,7 +55,7 @@ class App extends React.Component {
       console.log("Name already exists in list")
       if (window.confirm(chPerson.name + " already exists. Assign new number?")) {
         const changedPers = {...chPerson, number: this.state.newNum}
-        personService.update(changedPers.id, changedPers)
+        personService.update(changedPers._id, changedPers)
           .then(response => {
             const persons = this.state.persons.filter(person => person.name !== this.state.newName)
             this.setState({
@@ -109,7 +109,7 @@ class App extends React.Component {
           {persons.map(pers =>
             <div key={pers.name}>
               <Person person={pers} />
-              <button onClick={this.remove(pers.id)}>Remove</button>
+              <button onClick={this.remove(pers._id)}>Remove</button>
             </div>)}
         </ul>
       </div>
