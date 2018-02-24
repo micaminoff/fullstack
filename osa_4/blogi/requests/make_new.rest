@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "how to rock js",
+    "title": "how to rock js2",
     "author": "Michael Aminoff",
     "url": "localhost:3003/api/blogs",
     "likes": 15
