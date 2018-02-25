@@ -6,7 +6,8 @@
   "scripts": {
     "watch": "nodemon index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "test": "jest --verbose"
   },
   "author": "Michael Aminoff",
   "license": "ISC",
