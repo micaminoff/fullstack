@@ -2,7 +2,8 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { initialBlogs, format, nonExistingId, blogsInDb, blog1, blog2, blog3 } = require('./test_helper')
+const User = require('../models/user')
+const { initialBlogs, format, nonExistingId, blogsInDb, blog1, blog2, blog3, usersInDb } = require('./test_helper')
 
 
 describe('when there is initially some blogs saved', async () => {
@@ -28,7 +29,12 @@ describe('when there is initially some blogs saved', async () => {
 
 })
 
-describe('adding new notes', async () => {
+describe('adding new blogs', async () => {
+    beforeAll(async () => {
+        await User.remove({})
+        const user = new User({ username: 'root', password: 'sekret', adult: true, blogs: [] })
+        await user.save()
+    })
     test('blogs are posted', async () => {
         const blogsAtStart = await blogsInDb()
         await api
@@ -128,6 +134,70 @@ describe('updating a blog', async () => {
         expect(contents).not.toContain(-5)
         expect(contents).toContain(200)
         expect(blogsAfter.length).toBe(blogsAtStart.length)
+    })
+})
+
+describe('when there is initially one user in db', async () => {
+    beforeAll(async () => {
+        await User.remove({})
+        const user = new User({ username: 'root', password: 'sekret', adult: true })
+        await user.save()
+    })
+
+    test('GET /api/users finds all users', async () => {
+        const usersBeforeOperation = await usersInDb()
+
+        await api
+            .get('/api/users')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAfterOperation = await usersInDb()
+        expect(usersBeforeOperation).toEqual(usersAfterOperation)
+    })
+
+    test('POST /api/users succeeds with a fresh username', async () => {
+        const usersBeforeOperation = await usersInDb()
+
+        const newUser = {
+            username: 'mluukkai',
+            name: 'Matti Luukkainen',
+            adult: false,
+            password: 'salainen'
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAfterOperation = await usersInDb()
+        expect(usersAfterOperation.length).toBe(usersBeforeOperation.length + 1)
+        const usernames = usersAfterOperation.map(u => u.username)
+        expect(usernames).toContain(newUser.username)
+    })
+
+    test('POST /api/users fails with proper statuscode and message if username already taken', async () => {
+        const usersBeforeOperation = await usersInDb()
+
+        const newUser = {
+            username: 'root',
+            name: 'Superuser',
+            adult: true,
+            password: 'salainen'
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(result.body).toEqual({ error: 'username must be unique' })
+
+        const usersAfterOperation = await usersInDb()
+        expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
     })
 })
 
