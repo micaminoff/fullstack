@@ -7,7 +7,7 @@ const Statistiikka = () => {
   if (palautteita === 0) {
     return (
       <div>
-        <h2>stataistiikka</h2>
+        <h2>statistiikka</h2>
         <div>ei yhtään palautetta annettu</div>
       </div>
     )
