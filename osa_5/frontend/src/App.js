@@ -39,6 +39,7 @@ class App extends React.Component {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       this.setState({ user })
+      blogService.setToken(user.token)
     }
   }
 
@@ -86,6 +87,54 @@ class App extends React.Component {
       })
   }
 
+  handleLike = (id) => {
+    return () => {
+      const blog = this.state.blogs.find(b => b._id === id)
+      const updated = { ...blog, likes: blog.likes + 1 }
+
+      blogService
+        .update(id, updated)
+        .then(updated => {
+          this.setState({
+            blogs: this.state.blogs.map(blog => blog._id !== id ? blog : updated)
+          })
+        })
+        .catch(error => {
+          this.setState({
+            error: `Unexpected error`,
+            type: 'error',
+            blogs: this.state.blogs.filter(b => b._id !== id)
+          })
+          setTimeout(() => {
+            this.setState({ error: null, type: '' })
+          }, 50000)
+        })
+    }
+  }
+
+  deleteBlog = (id) => {
+    return () => {
+
+      blogService
+        .remove(id)
+        .then(updated => {
+          this.setState({
+            blogs: this.state.blogs.filter(blog => blog._id !== id)
+          })
+        })
+        .catch(error => {
+          this.setState({
+            error: `Unexpected error`,
+            type: 'error',
+            blogs: this.state.blogs.filter(b => b._id !== id)
+          })
+          setTimeout(() => {
+            this.setState({ error: null, type: '' })
+          }, 50000)
+        })
+    }
+  }
+
   logout = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
     this.setState({ username: '', password: '', user: null })
@@ -103,8 +152,9 @@ class App extends React.Component {
     )
   }
 
-
   render() {
+    const myData = [].concat(this.state.blogs)
+      .sort((a, b) => a.likes < b.likes)
 
     return (
       <div>
@@ -120,8 +170,10 @@ class App extends React.Component {
 
             {this.showBlogForm()}
             <h3>Blog list</h3>
-            {this.state.blogs.map(blog =>
-              <Blog key={blog._id} blog={blog}/>)}
+            {myData.map(blog =>
+              <Blog key={blog._id} blog={blog}
+                likeHandler={this.handleLike(blog._id)}
+                deleteButton={this.deleteBlog(blog._id)}/>)}
           </div>
         }
       </div>
