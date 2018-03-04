@@ -5,6 +5,7 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 class App extends React.Component {
   constructor(props) {
@@ -90,29 +91,37 @@ class App extends React.Component {
     this.setState({ username: '', password: '', user: null })
   }
 
+  showBlogForm = () => {
+    return (
+      <Togglable buttonLabel="New Blog">
+        <BlogForm addBlog={this.addBlog}
+          author={this.state.author}
+          title={this.state.title}
+          url={this.state.url}
+          handleChange={this.handleBlogChange} />
+      </Togglable>
+    )
+  }
+
 
   render() {
 
     return (
       <div>
-        <Notification message={this.state.error} type={this.state.type}/>
+        <Notification message={this.state.error} type={this.state.type} />
         {this.state.user === null ?
           <LoginForm username={this.state.username} password={this.state.password}
-            handleChange={this.handleLoginFieldChange} login={this.login}/>
-          : 
+            handleChange={this.handleLoginFieldChange} login={this.login} />
+          :
           <div>
             <h2>Blogs</h2>
             <p>{this.state.user.name} logged in.</p>
             <button onClick={this.logout}>Logout</button>
 
-            <BlogForm addBlog={this.addBlog}
-              author={this.state.author}
-              title={this.state.title}
-              url={this.state.url}
-              handleChange={this.handleBlogChange}/>
+            {this.showBlogForm()}
             <h3>Blog list</h3>
             {this.state.blogs.map(blog =>
-              <Blog key={blog._id} blog={blog} />)}
+              <Blog key={blog._id} blog={blog}/>)}
           </div>
         }
       </div>
