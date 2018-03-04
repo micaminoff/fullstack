@@ -20,6 +20,6 @@ describe.only('<Blog />', () => {
     // haetaan tarkastettava, eli detaljit sisältävä osa komponentista
     const contentDiv = nameDiv.find('.expandable')
 
-    expect(contentDiv.getElement().props.style).toEqual({display: ''})
+    expect(contentDiv.getElement().props.style).toEqual({display: 'none'})
   })
 })
