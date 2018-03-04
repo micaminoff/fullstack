@@ -20,7 +20,7 @@ class Blog extends React.Component {
       <div>
         <div className='blogStyle' onClick={this.toggleVisibility}>
           {blog.author} {blog.title}
-          <div style={showWhenVisible}>
+          <div style={showWhenVisible} className='expandable'>
             {blog.url} <br />
             {blog.likes} likes <button onClick={this.props.likeHandler}>like</button><br />
             added by {blog.user.name}
