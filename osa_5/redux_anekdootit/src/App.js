@@ -2,7 +2,7 @@ import React from 'react';
 
 class App extends React.Component {
   render() {
-    const anecdotes = this.props.store.getState()
+    const anecdotes = [].concat(this.props.store.getState()).sort((a, b) => a.votes < b.votes)
     return (
       <div>
         <h2>Anecdotes</h2>
