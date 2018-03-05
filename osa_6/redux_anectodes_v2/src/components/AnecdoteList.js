@@ -1,5 +1,6 @@
 import React from 'react'
 import { actionCreator } from '../reducers/anecdoteReducer'
+import { notActionCreator } from '../reducers/notificationReducer'
 
 class AnecdoteList extends React.Component {
   render() {
@@ -14,9 +15,13 @@ class AnecdoteList extends React.Component {
             </div>
             <div>
               has {anecdote.votes}
-              <button onClick={() =>
+              <button onClick={() => {
                 this.props.store.dispatch(actionCreator.vote(anecdote.id))
-              }>
+                this.props.store.dispatch(notActionCreator.succeed('voted for ' + anecdote.content))
+                setTimeout(() => {
+                  this.props.store.dispatch(notActionCreator.reset())
+                }, 5000)
+              }}>
                 vote
               </button>
             </div>

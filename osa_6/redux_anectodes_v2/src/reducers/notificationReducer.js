@@ -1,24 +1,33 @@
-export const actionCreator = {
+export const notActionCreator = {
   fail() {
     return {
       type: 'ERROR',
-      message: 'You fucked up!'
+      notification: 'You fucked up!'
     }
   },
-  succeed() {
+  succeed(message) {
     return {
       type: 'SUCCESS',
-      message: 'Well done!'
+      notification: message
+    }
+  },
+  reset() {
+    return {
+      type: 'ZERO',
+      notification: ''
     }
   }
 }
 
 const notReducer = (state = 'default message', action) => {
   if (action.type === 'ERROR') {
-    return { ...state, message: action.message }
+    return action.notification
   }
   if (action.type === 'SUCCESS') {
-    return { ...state, message: action.message }
+    return action.notification
+  }
+  if (action.type === 'ZERO') {
+    return action.notification
   }
   return state
 }
