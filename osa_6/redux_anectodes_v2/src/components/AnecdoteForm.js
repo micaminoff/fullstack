@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { actionCreator } from '../reducers/anecdoteReducer'
 import { notActionCreator } from '../reducers/notificationReducer'
 
@@ -6,10 +7,10 @@ class AnecdoteForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()
     const content = e.target.anecdote.value
-    this.props.store.dispatch(actionCreator.create(content))
-    this.props.store.dispatch(notActionCreator.succeed('created new anecdote!'))
+    this.context.store.dispatch(actionCreator.create(content))
+    this.context.store.dispatch(notActionCreator.succeed('created new anecdote!'))
     setTimeout(() => {
-      this.props.store.dispatch(notActionCreator.reset())
+      this.context.store.dispatch(notActionCreator.reset())
     }, 5000)
 
     e.target.anecdote.value = ''
@@ -25,6 +26,10 @@ class AnecdoteForm extends React.Component {
       </div>
     )
   }
+}
+
+AnecdoteForm.contextTypes = {
+  store: PropTypes.object
 }
 
 export default AnecdoteForm
