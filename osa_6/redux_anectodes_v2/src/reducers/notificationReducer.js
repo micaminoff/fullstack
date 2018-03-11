@@ -1,33 +1,24 @@
-export const notActionCreator = {
-  fail() {
-    return {
-      type: 'ERROR',
-      notification: 'You fucked up!'
-    }
-  },
-  succeed(message) {
-    return {
-      type: 'SUCCESS',
-      notification: message
-    }
-  },
-  reset() {
-    return {
-      type: 'ZERO',
-      notification: ''
-    }
+export const notify = (message, timeout) => {
+  return (dispatch) => {
+    console.log(message)
+    console.log(timeout)
+    dispatch({
+      type: 'NOTIFY',
+      message: message,
+    })
+
+    setTimeout(() => {
+      dispatch({
+        type: 'NOTIFY',
+        message: ''
+      })
+    }, timeout*1000)
   }
 }
 
-const notReducer = (state = 'default message', action) => {
-  if (action.type === 'ERROR') {
-    return action.notification
-  }
-  if (action.type === 'SUCCESS') {
-    return action.notification
-  }
-  if (action.type === 'ZERO') {
-    return action.notification
+const notReducer = (state = '', action) => {
+  if (action.type === 'NOTIFY') {
+    return action.message
   }
   return state
 }

@@ -1,19 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { vote } from '../reducers/anecdoteReducer'
-import { notActionCreator } from '../reducers/notificationReducer'
-import anecdoteService from '../services/anecdotes'
+import { notify } from '../reducers/notificationReducer'
 
 class AnecdoteList extends React.Component {
   handleVote = (anecdote) => {
     return async () => {
-      this.props.vote(anecdote.id)
-      anecdote = { ...anecdote, votes: anecdote.votes + 1 }
-      await anecdoteService.vote(anecdote)
-      this.props.succeed('voted for ' + anecdote.content)
-      setTimeout(() => {
-        this.props.reset()
-      }, 5000)
+      await this.props.vote(anecdote)
+      this.props.notify('You voted for ' + anecdote.content, 10)
     }
   }
 
@@ -41,18 +35,7 @@ const mapStateToProps = (state) => {
   // Muahahahaha. Paras ratkaisu ikinä.
   return { anecdotes: state.anecdotes.filter(a => (a.content.toLowerCase()).includes(state.filter.toLowerCase())) }
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-    vote: (id) => {
-      dispatch(vote(id))
-    },
-    succeed: (message) => {
-      dispatch(notActionCreator.succeed(message))
-    },
-    reset: () => { dispatch(notActionCreator.reset()) }
-  }
-}
 
-const ConnectedAnecdoteList = connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)
+const ConnectedAnecdoteList = connect(mapStateToProps, { vote, notify }) (AnecdoteList)
 
 export default ConnectedAnecdoteList
