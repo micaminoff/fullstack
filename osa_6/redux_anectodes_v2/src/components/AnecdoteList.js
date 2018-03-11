@@ -1,22 +1,22 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { actionCreator } from '../reducers/anecdoteReducer'
 import { notActionCreator } from '../reducers/notificationReducer'
-import PropTypes from 'prop-types'
 
 class AnecdoteList extends React.Component {
   handleVote = (anecdote) => {
     return () => {
-      this.context.store.dispatch(actionCreator.vote(anecdote.id))
-      this.context.store.dispatch(notActionCreator.succeed('voted for ' + anecdote.content))
+      this.props.vote(anecdote.id)
+      this.props.succeed('voted for ' + anecdote.content)
       setTimeout(() => {
-        this.context.store.dispatch(notActionCreator.reset())
+        this.props.reset()
       }, 5000)
     }
   }
 
   render() {
-    const anecdotes = this.context.store.getState().anecdotes
-    const filter = this.context.store.getState().filter
+    const anecdotes = this.props.anecdotes
+    const filter = this.props.filter
     const filtered = anecdotes.filter(a => (a.content.toLowerCase()).includes(filter.toLowerCase()))
     return (
       <div>
@@ -37,8 +37,21 @@ class AnecdoteList extends React.Component {
   }
 }
 
-AnecdoteList.contextTypes = {
-  store: PropTypes.object
+const mapStateToProps = (state) => {
+  return { anecdotes: state.anecdotes, filter: state.filter }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    vote: (id) => {
+      dispatch(actionCreator.vote(id))
+    },
+    succeed: (message) => {
+      dispatch(notActionCreator.succeed(message))
+    },
+    reset: () => { dispatch(notActionCreator.reset()) }
+  }
 }
 
-export default AnecdoteList
+const ConnectedAnecdoteList = connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)
+
+export default ConnectedAnecdoteList
