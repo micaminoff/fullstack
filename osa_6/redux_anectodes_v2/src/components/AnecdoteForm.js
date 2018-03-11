@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { actionCreator } from '../reducers/anecdoteReducer'
+import { create } from '../reducers/anecdoteReducer'
 import { notActionCreator } from '../reducers/notificationReducer'
 import anecdoteService from '../services/anecdotes'
 
@@ -37,7 +37,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     create: (content) => {
-      dispatch(actionCreator.create(content))
+      dispatch(create(content))
     },
     succeed: (message) => {
       dispatch(notActionCreator.succeed(message))

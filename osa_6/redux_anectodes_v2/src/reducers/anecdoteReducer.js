@@ -1,22 +1,25 @@
-export const actionCreator = {
-  vote(id) {
-    return {
-      type: 'VOTE',
-      id: id
-    }
-  },
-  create(content) {
-    return {
-      type: 'CREATE',
-      data: content
-    }
-  },
-  init(anecdotes) {
+import anecdoteService from '../services/anecdotes'
+
+export const vote = (id) => {
+  return {
+    type: 'VOTE',
+    id: id
+  }
+}
+export const create = (content) => {
+  return {
+    type: 'CREATE',
+    data: content
+  }
+}
+export const init = () => {
+  return async (dispatch) => {
+    const anecdotes = await anecdoteService.getAnecdotes()
     console.log(anecdotes)
-    return {
+    dispatch({
       type: 'INIT',
       data: anecdotes
-    }
+    })
   }
 }
 
