@@ -14,7 +14,7 @@ const saveAnecdote = async (content) => {
 }
 
 const vote = async (anecdote) => {
-  const response = await axios.put(url, anecdote)
+  const response = await axios.put(url + `/${anecdote.id}`, anecdote)
   return response.data
 }
 
