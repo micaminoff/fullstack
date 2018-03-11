@@ -15,9 +15,6 @@ class AnecdoteList extends React.Component {
   }
 
   render() {
-    //const anecdotes = this.props.anecdotes
-    //const filter = this.props.filter
-    //const filtered = anecdotes.filter(a => (a.content.toLowerCase()).includes(filter.toLowerCase()))
     return (
       <div>
         <h2>Anecdotes</h2>
@@ -38,6 +35,7 @@ class AnecdoteList extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+  // Muahahahaha. Paras ratkaisu ikinä.
   return { anecdotes: state.anecdotes.filter(a => (a.content.toLowerCase()).includes(state.filter.toLowerCase())) }
 }
 const mapDispatchToProps = (dispatch) => {
