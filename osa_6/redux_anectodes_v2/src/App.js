@@ -4,12 +4,12 @@ import AnecdoteForm from './components/AnecdoteForm'
 import AnecdoteList from './components/AnecdoteList'
 import Filter from './components/Filter'
 import { actionCreator } from './reducers/anecdoteReducer'
-import { getAnecdotes } from './services/anecdotes'
+import anecdoteService from './services/anecdotes'
 import connect from 'react-redux/lib/connect/connect'
 
 class App extends React.Component {
   componentDidMount = async () => {
-    const anecdotes = await getAnecdotes()
+    const anecdotes = await anecdoteService.getAnecdotes()
     console.log(anecdotes)
     this.props.init(anecdotes)
   }
